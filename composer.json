@@ -9,9 +9,16 @@
             "email": "scott@swt83.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:swt83/php-laravel-csv.git"
+        }
+    ],
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "4.0.*"
+        "illuminate/support": "4.0.*",
+        "travis/csv": "*"
     },
     "autoload": {
         "psr-0": {
