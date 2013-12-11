@@ -1,6 +1,8 @@
 {
-    "name": "vendor/package",
-    "description": "",
+    "name": "travis/bitcoincharts",
+    "description": "A Laravel PHP library for using the BitcoinCharts API.",
+    "homepage": "https://github.com/swt83/php-laravel-bitcoincharts",
+    "license": "MIT",
     "authors": [
         {
             "name": "Scott Travis",
@@ -12,11 +14,8 @@
         "illuminate/support": "4.0.*"
     },
     "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
         "psr-0": {
-            "Vendor\\Package\\": "src/"
+            "Travis\\": "src/"
         }
     },
     "minimum-stability": "dev"
