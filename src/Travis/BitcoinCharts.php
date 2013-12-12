@@ -23,6 +23,7 @@ class BitcoinCharts {
 
             // detect "start" and convert
             if (isset($args['start'])) $args['start'] = strtotime($args['start']);
+            if (isset($args['end'])) $args['end'] = strtotime($args['end']);
 
             // construct query
             $query = '';
@@ -31,8 +32,11 @@ class BitcoinCharts {
                 $query .= '&'.$key.'='.urlencode($value);
             }
 
-            // make csv object
-            $csv = \Travis\CSV::from_url($endpoint.'?'.$query, false); // false flag means first row NOT headers
+            // make url
+            $url = $endpoint.'?'.$query;
+
+            // load csv from remote
+            $csv = \Travis\CSV::from_url($url, false); // false flag means first row NOT headers
 
             // catch error...
             if (!$csv) return false;
