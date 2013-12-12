@@ -32,10 +32,13 @@ class BitcoinCharts {
             }
 
             // make csv object
-            $csv = \Travis\CSV::from_url($endpoint.'?'.$query);
+            $csv = \Travis\CSV::from_url($endpoint.'?'.$query, false); // false flag means first row NOT headers
 
             // catch error...
             if (!$csv) return false;
+
+            // add columns
+            $csv->columns(array('time', 'price', 'volume'));
 
             // return
             return $csv->to_array();
