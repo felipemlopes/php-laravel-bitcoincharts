@@ -20,7 +20,7 @@ class Provider extends ServiceProvider {
      */
     public function boot()
     {
-        $this->package('swt83/bitcoincharts', 'travis/bitcoincharts');
+        $this->package('travis/bitcoincharts');
     }
 
     /**

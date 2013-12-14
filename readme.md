@@ -25,10 +25,16 @@ You may also wish to add an alias to remove the namespace:
 Call the desired method and pass the params as a single array.
 
 ```php
-$chart = BitcoinCharts::get(array(
-    'symbol' => 'bitstampUSD',
-    'start' => '2013-12-01', // will interpret using strtotime() and convert to unix timestamp
-));
+$prices = BitcoinCharts::all('bitstampUSD');
+$prices = BitcoinCharts::recent('bitstampUSD');
 ```
 
-See [BitcoinCharts](http://bitcoincharts.com/about/markets-api/) for full list of arguments.
+The ``all()`` method will provide all trades from all time up to the previous evening, which represents a huge amount of data.  The ``recent()`` method will provide the last day of trades up to about 15 minutes ago.
+
+See [BitcoinCharts](http://bitcoincharts.com/about/markets-api/) for more information.
+
+## Notes
+
+The API is broken and won't perform as expected when using the ``start`` and ``end`` arguments.  So I've changed the methods in this library to only accept symbol.  You can manually splice together long and short histories to get the dataset you want.
+
+Also, you may need to increase the memory allowed to the application when using the ``all()`` method.

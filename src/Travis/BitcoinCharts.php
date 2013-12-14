@@ -5,35 +5,58 @@ namespace Travis;
 class BitcoinCharts {
 
     /**
-     * Return array from BitcoinCharts.
+     * Return array of recent trades.
      *
-     * @param   array   $args
+     * @param   string  $symbol
      * @return  array
      */
-    public static function get($args = array())
+    public static function recent($symbol)
+    {
+        return static::get('recent', $symbol);
+    }
+
+    /**
+     * Return array of all trades.
+     *
+     * @param   string  $symbol
+     * @return  array
+     */
+    public static function all($symbol)
+    {
+        return static::get('all', $symbol);
+    }
+
+    /**
+     * Process request w/ API.
+     *
+     * @param   string  $method
+     * @param   string  $symbol
+     * @return  array
+     */
+    protected static function get($method, $symbol)
     {
         // calculate hash
-        $hash = md5(serialize($args));
+        $hash = md5($method.$symbol);
+
+        // set time for cache...
+        $time = $method == 'all' ? 720 : 15;
 
         // cache for 15 minutes...
-        return \Cache::remember('bitcoincharts_'.$hash, 15, function() use($args)
+        return \Cache::remember('bitcoincharts_'.$hash, $time, function() use($method, $symbol)
         {
-            // determine endpoint
-            $endpoint = 'http://api.bitcoincharts.com/v1/trades.csv';
-
-            // detect "start" and convert
-            if (isset($args['start'])) $args['start'] = strtotime($args['start']);
-            if (isset($args['end'])) $args['end'] = strtotime($args['end']);
-
-            // construct query
-            $query = '';
-            foreach ($args as $key => $value)
+            // if all...
+            if ($method == 'all')
             {
-                $query .= '&'.$key.'='.urlencode($value);
+                // make url
+                $url = 'http://api.bitcoincharts.com/v1/csv/'.$symbol.'.csv';
             }
 
-            // make url
-            $url = $endpoint.'?'.$query;
+            // else if recent...
+            else
+            {
+                // make url
+                $url = 'http://api.bitcoincharts.com/v1/trades.csv?symbol='.$symbol;
+            }
 
             // load csv from remote
             $csv = \Travis\CSV::from_url($url, false); // false flag means first row NOT headers
@@ -44,8 +67,17 @@ class BitcoinCharts {
             // add columns
             $csv->columns(array('time', 'price', 'volume'));
 
+            // get rows
+            $history = $csv->to_array();
+
+            // sort the rows by time (oldest first)
+            usort($history, function($a, $b)
+            {
+                return $a['time'] < $b['time'] ? -1 : 1;
+            });
+
             // return
-            return $csv->to_array();
+            return $history;
         });
     }
 
