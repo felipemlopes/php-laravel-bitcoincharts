@@ -48,7 +48,16 @@ class BitcoinCharts {
             if ($method == 'all')
             {
                 // make url
-                $url = 'http://api.bitcoincharts.com/v1/csv/'.$symbol.'.csv';
+                $url = 'http://api.bitcoincharts.com/v1/csv/'.$symbol.'.csv.gz';
+
+                // open file
+                $string = \File::getRemote($url);
+
+                // unzip
+                $string = gzdecode($string);
+
+                // load csv from remote
+                $csv = \Travis\CSV::from_string($string, false);
             }
 
             // else if recent...
@@ -56,10 +65,10 @@ class BitcoinCharts {
             {
                 // make url
                 $url = 'http://api.bitcoincharts.com/v1/trades.csv?symbol='.$symbol;
-            }
 
-            // load csv from remote
-            $csv = \Travis\CSV::from_url($url, false); // false flag means first row NOT headers
+                // load csv from remote
+                $csv = \Travis\CSV::from_url($url, false);
+            }
 
             // catch error...
             if (!$csv) return false;
