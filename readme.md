@@ -4,21 +4,7 @@ A Laravel PHP library for working w/ the BitcoinCharts API.
 
 ## Install
 
-This library is designed for use w/ Laravel, as it requires the use of caching and CSV file conversions.
-
-### Provider
-
-Register your service provider in ``app/config/app.php``:
-
-```php
-'Travis\BitcoinCharts\Provider'
-```
-
-You may also wish to add an alias to remove the namespace:
-
-```php
-'BitcoinCharts' => 'Travis\BitcoinCharts'
-```
+Normall install via Composer.
 
 ## Usage
 
@@ -35,6 +21,5 @@ See [BitcoinCharts](http://bitcoincharts.com/about/markets-api/) for more inform
 
 ## Notes
 
-The API is broken and won't perform as expected when using the ``start`` and ``end`` arguments.  So I've changed the methods in this library to only accept symbol.  You can manually splice together long and short histories to get the dataset you want.
-
-Also, you may need to increase the memory allowed to the application when using the ``all()`` method.
+- The API is broken and won't perform as expected when using the ``start`` and ``end`` arguments.  So I've changed the methods in this library to only accept symbol.  You can manually splice together long and short histories to get the dataset you want.
+- You may need to increase the memory allowed to the application when using the ``all()`` method.
