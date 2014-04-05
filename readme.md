@@ -23,3 +23,4 @@ See [BitcoinCharts](http://bitcoincharts.com/about/markets-api/) for more inform
 
 - The API is broken and won't perform as expected when using the ``start`` and ``end`` arguments.  So I've changed the methods in this library to only accept symbol.  You can manually splice together long and short histories to get the dataset you want.
 - You may need to increase the memory allowed to the application when using the ``all()`` method.
+- I encountered an issue where this package couldn't connect to BitcoinCharts due to their server returning an IPv6 address.  I had to modify my server to disable IPv6, which allowed the PHP to continue working properly.

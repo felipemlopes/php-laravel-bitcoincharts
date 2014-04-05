@@ -2,6 +2,8 @@
 
 namespace Travis;
 
+use Travis\CSV;
+
 class BitcoinCharts {
 
     /**
@@ -39,13 +41,13 @@ class BitcoinCharts {
         $hash = md5($method.$symbol);
 
         // set time for cache...
-        $time = $method == 'all' ? 720 : 15;
+        $time = $method === 'all' ? 720 : 15;
 
         // load from cache...
         return \Cache::remember('bitcoincharts_'.$hash, $time, function() use($method, $symbol)
         {
             // if all...
-            if ($method == 'all')
+            if ($method === 'all')
             {
                 // make url
                 $url = 'http://api.bitcoincharts.com/v1/csv/'.$symbol.'.csv.gz';
@@ -57,7 +59,7 @@ class BitcoinCharts {
                 $string = gzdecode($string);
 
                 // load csv from remote
-                $csv = \Travis\CSV::from_string($string, false);
+                $csv = CSV::from_string($string, false);
             }
 
             // else if recent...
@@ -67,7 +69,7 @@ class BitcoinCharts {
                 $url = 'http://api.bitcoincharts.com/v1/trades.csv?symbol='.$symbol;
 
                 // load csv from remote
-                $csv = \Travis\CSV::from_url($url, false);
+                $csv = CSV::from_url($url, false);
             }
 
             // catch error...
